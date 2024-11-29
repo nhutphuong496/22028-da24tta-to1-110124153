@@ -1,137 +1,274 @@
-#define SIZE 100 //Khai bao mang
 #include <stdio.h>
-void Nhap_Mang (int A[], int n);
-void Xuat_Mang (int A[], int n);
-void Tinh_Tong (int A[], int n);
-float Tinh_TongTB (int A[], int n);
-int Dem_Phan_Tu_Duong (int A[], int n);
-void Sap_Xep_Thu_Tu_Tang_Dan (int A[], int n);
-void In_Cac_Gia_Tri_Tai_Vi_Tri_Le (int A[], int n);
-void In_Vi_Tri_Co_Gia_Tri_Bang_0 (int A[], int n);
+#define ROW 100
+#define COL 100
+
+void nhapMang (int a[][COL], int m, int n);
+void xuatMang (int a[][COL], int m, int n);
+int tinhTongMang (int a[][COL], int m, int n);
+int tinhTongDong (int a[][COL], int m, int n);
+int tinhTongCot (int a[][COL], int m, int n);
+int ktSOAM (int a[][COL], int m, int n);
+int ktSNT (int n);
+int ktSNTCot (int a[][COL], int m, int n);
+void sapGiamDong (int a[][COL], int m, int n);
+int ktSOLE (int a[][COL], int m, int n);
+int timSo (int a[][COL], int m, int n, int x);
+void timvitri (int a[][COL], int m, int n, int x);
+int timMAX (int a[][COL], int m, int n);
+int timMIN (int a[][COL], int m, int n);
+void inSNT (int a[][COL], int m, int n);
+
 int main()
 {
-	//Nhap so luong phan tu mang A
-	int A [SIZE];
-	int n;
+	int A[ROW][COL], m, n, k, x;
+	do 
+	{
+		printf("\nNhap so dong va so cot cho mang: ");
+		scanf("%d %d", &m, &n);
+		
+	}while (m<=0 || n<=0 || m>100 || n>100);
+	
+	// Goi ham
+	// Cau a
+	printf("\nNhap gia tri cho Mang: ");
+	nhapMang(A,m,n);
+	// Cau b
+	printf("\nCac gia tri trong Mang: \n");
+	xuatMang(A,m,n);
+	// Cau c
+	printf("\nTong cac gia tri trong Mang: %d", tinhTongMang(A,m,n));
+	//Nhap so thao tac tren dong hay tren cot
 	do
 	{
-		printf ("\nNhap so luong phan tu mang: ");
-		scanf ("%d",&n);
-	} while (n <= 0 || n > SIZE);
-	//Nhap phan tu mang
-	Nhap_Mang (A,n);
-	//Xuat phan tu mang
-	Xuat_Mang (A,n);
-	//Tinh Tong
-	Tinh_Tong (A,n);
-	//Tinh tongTB
-	printf ("\nTong trung binh cac vi tri le la: %.2f\n",Tinh_TongTB(A,n));
-	//Dem phan tu duong 
-	printf ("\nSo phan tu duong trong mang la: %d\n",Dem_Phan_Tu_Duong(A,n));
-	//Sap xep phan tu trong mang tang dan
-	Sap_Xep_Thu_Tu_Tang_Dan(A,n);
-	//In cac gia tri tai vi tri le
-	In_Cac_Gia_Tri_Tai_Vi_Tri_Le(A,n);
-	//In ra man hinh cac vi tri co gia tri = 0
-	In_Vi_Tri_Co_Gia_Tri_Bang_0(A,n);
+		printf("\nNhap gia tri thao tac: ");
+		scanf("%d", &k);
+	}while( k<0||k>=m);
+	
+	// Cau d
+	printf("\nTong cac gia tri tren dong %d: %d", k, tinhTongDong(A,k,n));
+	// Cau e
+	printf("\nTong cac gia tri tren cot %d: %d", k, tinhTongCot(A,m,k));
+	// Cau f
+	if(ktSOAM(A,k,n)!=0)
+		printf("\nTren dong %d co ton tai so AM", k);
+	else if(ktSOAM(A,k,n)==0)
+		printf("\ntren dong %d khong ton tai so AM", k);
+	// Cau g
+	if(ktSNTCot(A,m,k)!=0)
+		printf("\nTren cot %d co ton tai SNT", k);
+	if(ktSNTCot(A,m,k)==0)
+		printf("\nTren cot %d khong ton tai SNT", k);
+	// Cau h
+	printf("\nMang sau khi sap Giam dan cac gia tri tren dong %d: \n", k);
+	sapGiamDong(A,k,n);
+	xuatMang(A,m,n);
+	// Cau i
+	if(ktSOLE(A,m,k)!=0)
+		printf("\nTren cot %d toan gia tri LE", k);
+	else if(ktSOLE(A,m,k)==0)
+		printf("\nTren cot %d khong toan gia tri LE", k);
+	// Nhap mot gia tri bat ki tu ban phim
+	printf("\nNhap mot gia tri bat ki de tim: ");
+	scanf("%d", &x);
+	// Cau j
+	if(timSo(A,m,n,x)!=0)
+		printf("\nTrong Mang co ton tai so nguyen %d vua nhap", x);
+	else if(timSo(A,m,n,x)==0)
+		printf("\nTrong Mang khong ton tai so nguyen %d vua nhap", x);
+	// Cau k
+	printf("\nVi tri trong Mang cua %d vua nhap: ", x);
+	timvitri(A,m,n,x);
+	// Cau l
+	printf("\nGia tri LON NHAT tren dong %d: %d", k, timMAX(A,k,n));
+	// Cau m
+	printf("\nGia tri NHO NHAT tren dong %d: %d", k,timMIN(A,k,n));
+	// Cau n
+	printf("\nSo Nguyen To tren dong %d: ", k);
+	inSNT(A,k,n);
+	
 	return 0;
 }
-void Nhap_Mang (int A[], int n)
+
+void inSNT (int a[][COL], int m, int n)
 {
-	for (int i = 0; i < n; i++)
+	for (int i=0; i<n ; i++)
 	{
-		printf ("\nNhap phan tu thu %d: ",i);
-		scanf ("%d",&A[i]);
+		if (ktSNT(a[m][i])!=0)
+			printf("%5d", a[m][i]);
 	}
 }
-void Xuat_Mang (int A[], int n)
+int timMIN (int a[][COL], int m, int n)
 {
-	printf ("\nCac phan tu trong mang la:\t");
-	for (int i = 0; i < n; i++)
+	int min=a[m][0];
+	for (int i=0 ; i<n-1 ; i++)
 	{
-		printf ("%d\t",A[i]);
-	}			
-}
-void Tinh_Tong (int A[], int n)
-{
-	int s = 0;
-	printf ("\n\nTong phan tu mang la: ");
-	for (int i = 0; i < n; i++)
-	{
-		s = s + A[i];
-	}
-	printf ("%d\n",s);
-}
-float Tinh_TongTB (int A[], int n)
-{
-	float STB = 0.0;
-    int dem = 0, s= 0;
-    for (int i = 1; i < n; i += 2) 
-	{
-        s = s + A[i];
-        dem++;
-    }
-    STB = s / dem;
-    return STB;
-}
-int Dem_Phan_Tu_Duong (int A[], int n)
-{
-	int dem = 0;
-	for (int i = 0; i < n; i++)
-	{
-		if (A[i] > 0)
+		for (int j=i+1 ; j<n ; j++)
 		{
-			dem++;
-		}
-	}
-	return dem;
-}
-void Sap_Xep_Thu_Tu_Tang_Dan (int A[], int n)
-{
-	int t;
-	for (int i = 0; i <= (n - 2); i++)
-	{
-		for (int j = i +1; j <= (n - 1); j++)
-		{
-			if (A[i] > A[j])
+			if(a[m][j]<a[m][i])
 			{
-				t = A[i];
-				A[i] = A[j];
-				A[j] = t;
+				min=a[m][j];
 			}
 		}
 	}
-		printf("\nCac gia tri cua mang tang dan la: ");
-    for (int i = 0; i < n; i++) 
-	{
-        printf("%d\t",A[i]);
-    }
+	return min;
 }
-void In_Cac_Gia_Tri_Tai_Vi_Tri_Le(int A[], int n) 
+int timMAX (int a[][COL], int m, int n)
 {
-    printf("\n\nCac gia tri tri vi tri le la: ");
-    for (int i = 1; i < n; i += 2) 
-	{ 
-        printf("%d ", A[i]);
-    }
-    printf("\n");
-}
-void In_Vi_Tri_Co_Gia_Tri_Bang_0(int A[], int n)
-{
-	printf("\nCac vi tri co gia tri bang 0 trong mang la: ");
-    int found = 0;
-    for (int i = 0; i < n; i++) 
+	int max=a[m][0];
+	for (int i=0 ; i<n-1 ; i++)
 	{
-        if (A[i] == 0) 
+		for (int j=i+1 ; j<n ; j++)
 		{
-            printf("%d ",A[i]);
-            found = 1;
-        }
-    }
-    if (!found) 
+			if(a[m][j]>a[m][i])
+			{
+				max=a[m][j];
+			}
+		}
+	}
+	return max;
+}
+void timvitri (int a[][COL], int m, int n, int x)
+{
+	for (int i=0 ; i<m ; i++)
 	{
-        printf("\n\nKhong tim thay vi tri co gia tri bang 0 trong mang.");
-    }
-    printf("\n");
+		for (int j=0 ; j<n ; j++)
+		{
+			if(a[i][j]==x)
+			{
+				printf("\nSo dong: %d\tSo cot: %d", i, j);
+			}
+		}
+	}
+}
+int timSo (int a[][COL], int m, int n, int x)
+{
+	int dem=0; 
+	for (int i=0 ; i<m ; i++)
+	{
+		for (int j=0 ; j<n ; j++)
+		{
+			if(a[i][j]==x)
+				dem++;
+		}
+	}
+	if (dem!=0)
+		return 1;
+	return 0;
+}
+int ktSOLE (int a[][COL], int m, int n)
+{
+	int dem=0;
+	for (int i=0 ; i<m ; i++)
+	{
+		if (a[i][n]%2!=0)
+			dem++;
+	}
+	if(dem==m)
+		return 1;
+	return 0;
+}
+void sapGiamDong (int a[][COL], int m, int n)
+{
+	int t=a[m][0];
+	for (int i=0 ; i<n-1 ; i++)
+	{
+		for (int j=i+1; j<n ; j++)
+		{
+			if(a[m][i]<a[m][j])
+			{
+				t=a[m][j];
+				a[m][j]=a[m][i];
+				a[m][i]=t;
+			}
+		}
+	}
+}
+int ktSNTCot (int a[][COL], int m, int n)
+{
+	int dem=0;
+	for (int i=0 ; i<m ; i++)
+	{
+		if(ktSNT(a[i][n])!=0)
+			dem++;
+	}
+	if(dem!=0)
+		return 1;
+	return 0;
+}
+int ktSNT (int n)
+{
+	int dem=0;
+	for (int i=1; i<=n ; i++)
+	{
+		if (n%i==0)
+			dem++;
+	}
+	if (dem==2)
+		return 1;
+	return 0;
+}
+int ktSOAM (int a[][COL], int m, int n)
+{
+	int dem=0;
+	for( int i=0 ; i<n ; i++)
+	{
+		if(a[m][i]<0)
+			dem++;
+	}
+	if (dem!=0)
+		return 1;
+	return 0;
+}
+int tinhTongCot (int a[][COL], int m, int n)
+{
+	int s=0;
+	for (int i=0 ; i<m ; i++)
+	{
+		s+=a[i][n];
+	}
+	return s;
+}
+int tinhTongDong (int a[][COL], int m, int n)
+{
+	int s=0;
+	for (int i=0 ; i<n ; i++)
+	{
+		s+=a[m][i];
+	}
+	return s;
+}
+int tinhTongMang (int a[][COL], int m, int n)
+{
+	int s=0;
+	for (int i=0 ; i<m ; i++)
+	{
+		for (int j=0 ; j<n ; j++)
+		{
+			s+=a[i][j];
+		}
+	}
+	return s;
+}
+void xuatMang (int a[][COL], int m, int n)
+{
+	for (int i=0 ; i<m ; i++)
+	{
+		for (int j=0 ; j<n ; j++)
+		{
+			printf("%6d", a[i][j]);
+		}
+		printf("\n");
+	}
+}
+void nhapMang (int a[][COL], int m, int n)
+{
+	for (int i=0 ; i<m ; i++)
+	{
+		for (int j=0 ; j<n ; j++)
+		{
+			printf("\nNhap gia tri cho phan tu A[%d][%d]: ", i, j);
+			scanf("%d", &a[i][j]);
+		}
+	}
 }
 
