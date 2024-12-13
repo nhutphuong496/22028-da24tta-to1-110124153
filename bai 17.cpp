@@ -1,21 +1,23 @@
 #include <stdio.h>
-int main() 
-{
-	int n;
-	//Nhap so n
-	do 
+int main()
+{ 
+	int n,S;
+	//Nhap so nguyen duong n
+	do
 	{
-		printf ("Nhap so nguyen tu 2-9: ");
-		scanf("%d",&n);
-	} while (n<=1||n>=10);
-    for (int i = 1; i <= n; i++) 
+		printf ("Nhap so nguyen duong n: ");
+		scanf ("%d",&n);
+	} while (n<0);
+	//Tinh tong cac chu so co trong n
+    while (n > 0) 
 	{
-        printf("\nBang cuu chuong %d:\n", i);
-        for (int j = 1; j <= 10; j++) 
-		{
-            printf("%d x %d = %d\n", i, j, i * j);
-        }
+         S = S + n % 10;  
+         n = n / 10;       
     }
+	//In ket qua
+    printf("\nTong cac so la: %d",S);
     return 0;
 }
+
+
 
